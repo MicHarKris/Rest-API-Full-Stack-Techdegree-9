@@ -1,2 +1,2 @@
 # Rest-API
- Full-Stack-Techdegree - Project 9
+ A REST API using Express. This API will provide a way to administer a school database containing information about users and courses.
