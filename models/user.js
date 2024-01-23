@@ -51,12 +51,9 @@ module.exports = (sequelize, DataTypes) => {
           },
         },
       },
-
-      // I kept running into an issue where I couldn't check the password length, without it comparing to the hashed password value (regardless of implemented order of operations), so I added a virtual attribute for the password and set the password attribute to a string. This fixed the issue.
-
-      // Virtual attribute for the user's password (not stored in the database)
+      // User's password attribute
       password: {
-        type: DataTypes.VIRTUAL,
+        type: DataTypes.STRING,
         allowNull: false,
         validate: {
           notNull: {
@@ -71,18 +68,15 @@ module.exports = (sequelize, DataTypes) => {
           },
         },
       },
-      // User's password attribute (stored in the database)
-      password: {
-        type: DataTypes.STRING,
-        allowNull: false,
-        set(val) {
-          const hashedPassword = bcrypt.hashSync(val, 10);
-          this.setDataValue("password", hashedPassword);
+    },
+    // hooks to hash the user's password before saving it to the database
+    {
+      hooks: {
+        beforeCreate: async (user, options) => {
+          const hashedPassword = await bcrypt.hash(user.password, 10);
+          user.set('password', hashedPassword);
         },
       },
-    },
-    //
-    {
       sequelize,
       modelName: "User",
     }

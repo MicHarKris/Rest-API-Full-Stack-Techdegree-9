@@ -23,7 +23,7 @@ router.get(
   authenticateUser,
   asyncHandler(async (req, res) => {
     const user = req.currentUser;
-    
+
     // Define the user properties to be returned
     res.status(200).json({
       id: user.id,
@@ -40,7 +40,7 @@ router.post(
   asyncHandler(async (req, res) => {
     try {
       await User.create(req.body);
-      res.status(201).json({ message: "Account successfully created!" });
+      res.status(201).location("/").end();
     } catch (error) {
       if (
         error.name === "SequelizeValidationError" ||
@@ -72,11 +72,7 @@ router.get(
       include: [
         {
           model: User,
-          attributes: [
-            "id", 
-            "firstName", 
-            "lastName", 
-            "emailAddress"],
+          attributes: ["id", "firstName", "lastName", "emailAddress"],
         },
       ],
     });
@@ -89,7 +85,7 @@ router.get(
   "/courses/:id",
   asyncHandler(async (req, res) => {
     const course = await Course.findByPk(req.params.id, {
-      attributes: [ 
+      attributes: [
         "id",
         "title",
         "description",
@@ -98,11 +94,7 @@ router.get(
       ],
       include: {
         model: User,
-        attributes: [
-          "id", 
-          "firstName", 
-          "lastName", 
-          "emailAddress"],
+        attributes: ["id", "firstName", "lastName", "emailAddress"],
       },
     });
     if (course) {
