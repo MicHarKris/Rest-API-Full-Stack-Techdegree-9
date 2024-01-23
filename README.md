@@ -2,7 +2,7 @@
  A REST API using Express. This API will provide a way to administer a school database containing information about users and courses.
 
 # About the Project
- I experienced a weird behavior while implementing a length check to the password model, where the check would always only be performed on the hashed value, even if the bcrypt encryption happened at a later point in the code - I circumvented the problem by applying the validation checks on the DataTypes.VIRTUAL password, and then storing the DataTypes.STRING password with the hashed value.
+ I have attempted a solution using hooks, in order to store a hashed version of the password, after the length check is performed - Previously I saw behaviour where I could either test the length of the password correctly, or I could hash the password (after which, the length check would always be compared to the hashed, and radically longer password). This seems to solve the issue.
 
  ### Tools and Technologies
  JavaScript, 
